@@ -14,7 +14,7 @@ import {
 } from "react-native"
 import { ChevronLeft, ChevronRight } from "lucide-react-native"
 import { useRouter } from "expo-router"
-
+import '../LogoutConfirmation/LogoutConfirmation'
 const PROFILE_IMAGE_URL = "https://cdn.pixabay.com/photo/2025/07/21/19/22/woman-9727004_1280.jpg"
 
 const SettingsScreen = ({navigation}) => {

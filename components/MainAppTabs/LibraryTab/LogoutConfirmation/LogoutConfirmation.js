@@ -4,8 +4,15 @@ import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, StatusBar, Moda
 
 const LogoutConfirmationScreen = ({ navigation }) => {
   const handleCancel = () => {
+    setModalVisible(false);
     navigation.goBack()
   }
+  const [modalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    // Show modal as soon as the screen mounts
+    setModalVisible(true);
+  }, []);
 
   const handleLogout = () => {
     console.log("User logged out")
