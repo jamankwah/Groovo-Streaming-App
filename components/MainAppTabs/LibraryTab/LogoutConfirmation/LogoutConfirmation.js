@@ -1,6 +1,7 @@
 "use client"
 
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, StatusBar, Modal } from "react-native"
+import React, { useState, useEffect } from 'react';
 
 const LogoutConfirmationScreen = ({ navigation }) => {
   const handleCancel = () => {
