@@ -26,6 +26,7 @@ import SearchResultsScreen from './components/MainAppTabs/SearchTab/SearchResult
 import ArtistScreen from './components/MainAppTabs/SearchTab/ArtistScreen';
 import AlbumScreen from './components/MainAppTabs/SearchTab/AlbumScreen';
 import PlaylistScreen from './components/MainAppTabs/SearchTab/PlaylistScreen';
+import OldOnboarding from './components/Onboarding/Onboarding1' 
 
 const Stack = createStackNavigator();
 
@@ -33,7 +34,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="HomeNavigation"
+        initialRouteName="OldOnboarding"
         screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
@@ -66,6 +67,7 @@ export default function App() {
         <Stack.Screen name="Artist" component={ArtistScreen} />
         <Stack.Screen name="Album" component={AlbumScreen} />
         <Stack.Screen name="Playlist" component={PlaylistScreen} />
+        <Stack.Screen name="OldOnboarding" component={OldOnboarding} />
       </Stack.Navigator>
     </NavigationContainer>
   );
