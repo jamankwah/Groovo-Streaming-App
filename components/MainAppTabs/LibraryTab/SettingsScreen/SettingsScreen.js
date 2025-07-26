@@ -17,34 +17,30 @@ import { useRouter } from "expo-router"
 
 const PROFILE_IMAGE_URL = "https://cdn.pixabay.com/photo/2025/07/21/19/22/woman-9727004_1280.jpg"
 
-const SettingsScreen = () => {
+const SettingsScreen = ({navigation}) => {
   const router = useRouter()
   const [showLyrics, setShowLyrics] = useState(true)
 
   const handleBackPress = () => {
-    router.back()
+    navigation.goBack()
+   
   }
 
-  const handleLanguagePress = () => {
-    console.log("Language selection pressed")
-    // router.push("/screens/language-selection")
+   const handleLanguagePress = () => {
+    navigation.navigate("LanguageSelection")
   }
 
   const handleStreamingQualityPress = () => {
-    console.log("Streaming quality pressed")
-    // router.push("/screens/streaming-quality")
+    navigation.navigate("StreamingQuality")
   }
 
   const handleDownloadQualityPress = () => {
-    console.log("Download quality pressed")
-    // router.push("/screens/download-quality")
+    navigation.navigate("DownloadQuality")
   }
 
   const handleLogoutPress = () => {
-    console.log("Logout pressed")
-    // router.push("/screens/logout-confirmation")
+    navigation.navigate("LogoutConfirmation")
   }
-
   const settingsItems = [
     {
       title: "Music Language(s)",

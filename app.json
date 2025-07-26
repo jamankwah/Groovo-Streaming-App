@@ -1,16 +1,16 @@
 {
   "expo": {
-    "name": "groovo-streaming-app",
-    "slug": "snack-845220ff-9750-4676-a027-1415b2515776",
+    "name": "GROOVO",
+    "slug": "groovo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/Logo.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/Logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#111111"
+      "backgroundColor": "#000000"
     },
     "ios": {
       "supportsTablet": true
@@ -18,7 +18,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/Logo.png",
-        "backgroundColor": "#111111"
+        "backgroundColor": "#000000"
       },
       "edgeToEdgeEnabled": true
     },
