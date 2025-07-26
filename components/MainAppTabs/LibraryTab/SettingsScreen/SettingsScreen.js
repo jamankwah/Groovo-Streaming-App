@@ -35,7 +35,7 @@ const SettingsScreen = ({navigation}) => {
   }
 
   const handleDownloadQualityPress = () => {
-    navigation.navigate("DownloadQuality")
+    console.log("DownloadQuality")
   }
 
   const handleLogoutPress = () => {
