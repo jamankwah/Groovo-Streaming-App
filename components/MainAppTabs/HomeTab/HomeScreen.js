@@ -1,6 +1,5 @@
 "use client"
 
-import { useRouter } from "expo-router"
 import { useRef, useState, useEffect } from "react"
 import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, StatusBar, Modal } from "react-native"
 import { BlurView } from "expo-blur"
