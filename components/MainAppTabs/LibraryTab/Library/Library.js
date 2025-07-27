@@ -111,7 +111,7 @@ const LibraryScreen = () => {
     }
   }
 
-  
+
 
 
   const renderLibraryItem = (item) => {
@@ -135,7 +135,7 @@ const LibraryScreen = () => {
   }
 
   const renderSongItem = (song) => (
-    <TouchableOpacity key={song.id} style={styles.songItem} onPress={() => handleSongPress(song)} activeOpacity={0.7}>
+    <TouchableOpacity key={song.id} style={styles.songItem} activeOpacity={0.7}>
       <View style={styles.songImageContainer}>
         <Image source={{ uri: song.image }} style={styles.songImage} />
         <View style={styles.playOverlay}>
@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
   moreButton: {
     padding: 4,
   },
-  
+
 })
 
 export default LibraryScreen

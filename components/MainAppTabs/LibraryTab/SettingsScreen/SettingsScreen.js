@@ -13,16 +13,14 @@ import {
   Image,
 } from "react-native"
 import { ChevronLeft, ChevronRight } from "lucide-react-native"
-import { useRouter } from "expo-router"
 
 const PROFILE_IMAGE_URL = "https://cdn.pixabay.com/photo/2025/07/21/19/22/woman-9727004_1280.jpg"
 
 const SettingsScreen = () => {
-  const router = useRouter()
   const [showLyrics, setShowLyrics] = useState(true)
 
   const handleBackPress = () => {
-    router.back()
+    navigation.goBack()
   }
 
   const handleLanguagePress = () => {
