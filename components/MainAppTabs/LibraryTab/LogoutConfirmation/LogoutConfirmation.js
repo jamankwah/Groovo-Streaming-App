@@ -7,16 +7,16 @@ const LogoutConfirmationScreen = ({ navigation }) => {
     navigation.goBack()
   }
 
+  
+
   const handleLogout = () => {
     console.log("User logged out")
     // Handle logout logic here
     // navigation.navigate('Login');
     navigation.navigate("Login")
-    modal.visible
   }
 
   return (
-    <Modal visible={true} transparent animationType="fade">
       <View style={styles.overlay}>
         <SafeAreaView style={styles.container}>
           <StatusBar barStyle="light-content" backgroundColor="rgba(0,0,0,0.8)" />
@@ -37,7 +37,6 @@ const LogoutConfirmationScreen = ({ navigation }) => {
           </View>
         </SafeAreaView>
       </View>
-    </Modal>
   )
 }
 
