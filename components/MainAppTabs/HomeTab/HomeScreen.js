@@ -106,7 +106,7 @@ const mixesForYou = [
   {
     id: "6",
     title: "Mix 2",
-    artist: "Ayra star, Tyla, Wizkid",
+    artist: "Afro Beat Mix",
     image:
       "https://imgix.bustle.com/uploads/image/2024/6/6/e8a94f4a/africanstars.jpg?w=1200&h=1200&fit=crop&crop=focalpoint&fm=jpg&fp-x=0.4875&fp-y=0.1622",
     duration: "3:12",
@@ -140,7 +140,7 @@ const featuringToday = [
 const followedArtists = [
   {
     id: "10",
-    title: "Kendrick Lamar, SZA",
+    title: "Super Ball",
     artist: "Kendrick Lamar, SZA",
     image:
       "https://i2-prod.birminghammail.co.uk/incoming/article32110373.ece/ALTERNATES/s810/0_GettyImages-2199018586.jpg",
