@@ -206,8 +206,7 @@ const createQueue = () => {
 }
 
 export default function IndexScreen() {
-  const navigation = useNavigation();
-  const router = useRouter()
+  const navigation = useNavigation()
   const scrollViewRef = useRef(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [queue, setQueue] = useState(createQueue())
