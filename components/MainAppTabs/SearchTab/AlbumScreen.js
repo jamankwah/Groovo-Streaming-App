@@ -21,70 +21,70 @@ const AlbumScreen = ({ navigation }) => {
       title: 'Are You Gone Already',
       duration: '4:30',
       isExplicit: true,
-      audioFile: require('../assets/audio/areyougonealready.mp3'), // Make sure this file exists
+      audioFile: require('../../../assets/audio/areyougonealready.mp3'), // Make sure this file exists
     },
     {
       id: 2,
       title: 'Needle (feat. Drake)',
       duration: '3:55',
       isExplicit: true,
-      audioFile: require('../assets/audio/needle.mp3'), // Make sure this file exists
+      audioFile: require('../../../assets/audio/needle.mp3'), // Make sure this file exists
     },
     {
       id: 3,
       title: 'FTCU',
       duration: '2:52',
       isExplicit: true,
-      audioFile: require('../assets/audio/FTCU.mp3'), // Add your audio file here
+      audioFile: require('../../../assets/audio/FTCU.mp3'), // Add your audio file here
     },
     {
       id: 4,
       title: 'Bahm Bahm (feat. Lil Wayne)',
       duration: '2:21',
       isExplicit: true,
-      audioFile: require('../assets/audio/bahmbahm.mp3'), // Add your audio file here
+      audioFile: require('../../../assets/audio/bahmbahm.mp3'), // Add your audio file here
     },
     {
       id: 5,
       title: 'Everybody (feat. Lil Uzi Vert)',
       duration: '3:01',
       isExplicit: true,
-      audioFile: require('../assets/audio/everybody.mp3'), // Add your audio file here
+      audioFile: require('../../../assets/audio/everybody.mp3'), // Add your audio file here
     },
     {
       id: 6,
       title: 'RNB (feat. Lil Wayne)',
       duration: '3:04',
       isExplicit: true,
-      audioFile: require('../assets/audio/rnb.mp3'), // Add your audio file here
+      audioFile: require('../../../assets/audio/rnb.mp3'), // Add your audio file here
     },
     {
       id: 7,
       title: 'Pink Birthday',
       duration: '2:08',
       isExplicit: false,
-      audioFile: require('../assets/audio/pinkbirthday.mp3'), // Add your audio file here
+      audioFile: require('../../../assets/audio/pinkbirthday.mp3'), // Add your audio file here
     },
     {
       id: 8,
       title: 'Cowgirl',
       duration: '3:36',
       isExplicit: true,
-      audioFile: require('../assets/audio/cowgirl.mp3'), // Add your audio file here
+      audioFile: require('../../../assets/audio/cowgirl.mp3'), // Add your audio file here
     },
     {
       id: 9,
       title: 'Just The Memories',
       duration: '3:55',
       isExplicit: false,
-      audioFile: require('../assets/audio/justthememories.mp3'), // Add your audio file here
+      audioFile: require('../../../assets/audio/justthememories.mp3'), // Add your audio file here
     },
     {
       id: 10,
       title: 'Pink Friday Girls',
       duration: '2:46',
       isExplicit: true,
-      audioFile: require('../assets/audio/pinkfridaygirls.mp3'), // Add your audio file here
+      audioFile: require('../../../assets/audio/pinkfridaygirls.mp3'), // Add your audio file here
     },
   ];
 
@@ -93,19 +93,19 @@ const AlbumScreen = ({ navigation }) => {
       id: 1,
       title: 'Queen',
       year: '2018',
-      image: require('../assets/images/album/queen.jpg'),
+      image: require('../../../assets/images/album/queen.jpg'),
     },
     {
       id: 2,
       title: 'The Pinkprint',
       year: '2014',
-      image: require('../assets/images/album/pinkprint.jpg'),
+      image: require('../../../assets/images/album/pinkprint.jpg'),
     },
     {
       id: 3,
       title: 'Roman Reloaded',
       year: '2012',
-      image: require('../assets/images/album/roman.jpg'),
+      image: require('../../../assets/images/album/roman.jpg'),
     },
   ];
 
