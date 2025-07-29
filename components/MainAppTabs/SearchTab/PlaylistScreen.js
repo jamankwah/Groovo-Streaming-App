@@ -9,79 +9,92 @@ import {
   SafeAreaView,
   ImageBackground,
 } from 'react-native';
-import { ArrowLeft, Play, MoveVertical as MoreVertical, Download, Heart, Shuffle } from 'lucide-react-native';
+import { ArrowLeft, Play, MoveVertical as MoreVertical, Download, Heart } from 'lucide-react-native';
+import { useAudio } from '../AudioContext';
 
 const PlaylistScreen = ({ navigation }) => {
+  const { currentlyPlaying, playTrack } = useAudio();
+
   const playlistTracks = [
     {
       id: 1,
-      title: 'Iron Boy',
+      title: 'The Victory Song',
       artist: 'Black Sherif',
-      duration: '3:45',
+      duration: '3:01',
       isExplicit: false,
+      audioFile: require('../../../assets/audio/victorysong.mp3'),
     },
     {
       id: 2,
-      title: 'Kwaku the Traveller',
+      title: 'One',
       artist: 'Black Sherif',
-      duration: '3:28',
+      duration: '3:19',
       isExplicit: false,
+      audioFile: require('../../../assets/audio/one.mp3'),
     },
     {
       id: 3,
-      title: 'Soja',
-      artist: 'Black Sherif',
-      duration: '3:12',
+      title: 'So it Goes',
+      artist: 'Black Sherif,Fireboy DML',
+      duration: '3:46',
       isExplicit: false,
+      audioFile: require('../../../assets/audio/soitgoes.mp3'),
     },
     {
       id: 4,
-      title: 'Destiny',
+      title: 'Top of the Morning',
       artist: 'Black Sherif',
-      duration: '3:35',
+      duration: '2:23',
       isExplicit: false,
+      audioFile: require('../../../assets/audio/topofthemorning.mp3'),
     },
     {
       id: 5,
-      title: 'Sad Boys',
+      title: 'Body',
       artist: 'Black Sherif',
-      duration: '3:30',
+      duration: '2:53',
       isExplicit: false,
+      audioFile: require('../../../assets/audio/body.mp3'),
     },
     {
       id: 6,
-      title: 'Homeless',
+      title: 'Sacrifice',
       artist: 'Black Sherif',
-      duration: '3:28',
+      duration: '2:40',
       isExplicit: false,
+      audioFile: require('../../../assets/audio/sacrifice.mp3'),
     },
     {
       id: 7,
-      title: 'Wasteman',
+      title: 'Soma Obi',
       artist: 'Black Sherif',
-      duration: '3:15',
+      duration: '2:48',
       isExplicit: false,
+      audioFile: require('../../../assets/audio/somaobi.mp3'),
     },
     {
       id: 8,
-      title: 'Ankonam',
+      title: 'Dreamer',
       artist: 'Black Sherif',
-      duration: '3:42',
+      duration: '2:27',
       isExplicit: false,
+      audioFile: require('../../../assets/audio/dreamer.mp3'),
     },
     {
       id: 9,
-      title: 'Ade Akye',
+      title: 'Iron Boy',
       artist: 'Black Sherif',
-      duration: '3:18',
+      duration: '3:23',
       isExplicit: false,
+      audioFile: require('../../../assets/audio/ironboy.mp3'),
     },
     {
       id: 10,
-      title: 'Konongo Zongo',
-      artist: 'Black Sherif',
-      duration: '3:55',
+      title: 'Sin City',
+      artist: 'Black Sherif,Seyi Vibez',
+      duration: '2:50',
       isExplicit: false,
+      audioFile: require('../../../assets/audio/sincity.mp3'),
     },
   ];
 
@@ -110,12 +123,20 @@ const PlaylistScreen = ({ navigation }) => {
     <TouchableOpacity 
       key={item.id} 
       style={styles.trackItem}
+      onPress={() => playTrack(item, playlistTracks)}
     >
       <View style={styles.trackNumber}>
-        <Text style={styles.trackNumberText}>{index + 1}</Text>
+        {currentlyPlaying === item.id ? (
+          <Play size={16} color="#BB86FC" fill="#BB86FC" />
+        ) : (
+          <Text style={styles.trackNumberText}>{index + 1}</Text>
+        )}
       </View>
       <View style={styles.trackInfo}>
-        <Text style={styles.trackTitle}>
+        <Text style={[
+          styles.trackTitle,
+          currentlyPlaying === item.id && styles.playingTrackTitle
+        ]}>
           {item.title}
         </Text>
         <Text style={styles.trackArtist}>{item.artist}</Text>
@@ -141,7 +162,7 @@ const PlaylistScreen = ({ navigation }) => {
         {/* Hero Section */}
         <View style={styles.heroSection}>
           <ImageBackground
-            source={require('../../../assets/images/playlists/ironboy.jpg')}
+            source={require('../assets/images/playlists/ironboy.jpg')}
             style={styles.heroBackground}
             imageStyle={styles.heroImage}
           >
@@ -155,7 +176,7 @@ const PlaylistScreen = ({ navigation }) => {
               
               <View style={styles.heroContent}>
                 <Image 
-                  source={require('../../../assets/images/playlists/ironboy.jpg')}
+                  source={require('../assets/images/playlists/ironboy.jpg')}
                   style={styles.albumCover}
                 />
                 <Text style={styles.albumTitle}>Iron Boy</Text>
@@ -196,7 +217,7 @@ const PlaylistScreen = ({ navigation }) => {
 
         {/* Related Playlists */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>More by Black Sherif</Text>
+          <Text style={styles.sectionTitle}>More like Black Sherif</Text>
           
           <ScrollView
             horizontal
@@ -207,6 +228,7 @@ const PlaylistScreen = ({ navigation }) => {
           </ScrollView>
         </View>
       </ScrollView>
+
     </SafeAreaView>
   );
 };
@@ -331,6 +353,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     marginBottom: 4,
+  },
+  playingTrackTitle: {
+    color: '#BB86FC',
   },
   trackArtist: {
     color: '#888',
