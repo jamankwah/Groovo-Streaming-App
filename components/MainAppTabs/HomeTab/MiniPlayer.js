@@ -1,32 +1,30 @@
 "use client"
-
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, Share } from "react-native"
-import { useState, useEffect } from "react"
 import {
-  ChevronDown,
-  MoreHorizontal,
+  BarChart3,
   Cast,
-  Heart,
+  ChevronDown,
+  ChevronRight,
   Download,
+  Heart,
+  MoreHorizontal,
+  Pause,
+  Play,
+  Repeat,
+  Repeat1,
   Share2,
   Shuffle,
   SkipBack,
-  Play,
-  Pause,
   SkipForward,
-  Repeat,
-  Repeat1,
-  ChevronRight,
-  BarChart3,
 } from "lucide-react-native"
+import { useCallback, useState } from "react"
+import { Image, ScrollView, Share, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
 const queue = [
   {
     id: "1",
-    title: "Inside Out",
-    artist: "The Chainsmokers, Charlee",
-    image:
-      "https://upload.wikimedia.org/wikipedia/en/thumb/4/48/TheChainsmokersInsideOut.jpg/250px-TheChainsmokersInsideOut.jpg",
+    title: "Lomo Lomo ",
+    artist: "KiDi, Black Sherif",
+    image: "https://ghmusicplus.com/wp-content/uploads/2024/08/IMG_2615.jpg",
     duration: "3:15",
     playing: true,
   },
@@ -34,112 +32,74 @@ const queue = [
     id: "2",
     title: "Young",
     artist: "The Chainsmokers",
-    image: "https://cdn.pixabay.com/photo/2016/08/24/20/39/merry-christmas-1617972_1280.jpg",
+    image: "https://i1.sndcdn.com/artworks-000241184161-2zadh9-t1080x1080.jpg",
     duration: "3:42",
+    playing: true,
   },
   {
     id: "3",
-    title: "Beach House",
-    artist: "The Chainsmokers - Sick",
-    image: "https://cdn.pixabay.com/photo/2020/10/13/13/28/ameland-5651866_1280.jpg",
+    title: "Humble",
+    artist: "Kendrick Lamar",
+    image:
+      "https://i2-prod.birminghammail.co.uk/incoming/article32110373.ece/ALTERNATES/s810/0_GettyImages-2199018586.jpg",
     duration: "4:01",
+    playing: true,
   },
   {
     id: "4",
-    title: "Kills You Slowly",
-    artist: "The Chainsmokers -",
-    image: "https://cdn.pixabay.com/photo/2015/01/28/09/50/death-614644_1280.jpg",
+    title: "Zenzele",
+    artist: "Uncle waffles",
+    image:
+      "https://www.okayafrica.com/media-library/uncle-waffles.jpg?id=35792104&width=1200&height=800&quality=80&coordinates=0%2C0%2C0%2C0",
     duration: "3:28",
+    playing: true,
   },
   {
     id: "5",
-    title: "Setting Fires",
-    artist: "The Chainsmokers, XYLO -",
-    image: "https://cdn.pixabay.com/photo/2022/07/19/20/11/fire-7332965_1280.jpg",
-    duration: "3:33",
+    title: "Mix 1",
+    artist: "Molly",
+    image: "https://www.3music.tv/uploads/news/11398655312025.jpeg",
+    duration: "2:58",
+    playing: true,
   },
   {
     id: "6",
-    title: "Somebody",
-    artist: "The Chainsmokers, Drew",
-    image: "https://cdn.pixabay.com/photo/2024/11/20/09/14/christmas-9210799_1280.jpg",
-    duration: "3:18",
+    title: "Mix 2",
+    artist: "Ayra star, Tyla ft Wizkid",
+    image:
+      "https://imgix.bustle.com/uploads/image/2024/6/6/e8a94f4a/africanstars.jpg?w=1200&h=1200&fit=crop&crop=focalpoint&fm=jpg&fp-x=0.4875&fp-y=0.1622",
+    duration: "2:40",
+    playing: true,
   },
   {
     id: "7",
-    title: "New York City",
-    artist: "The Chainsmokers -",
-    image: "https://cdn.pixabay.com/photo/2016/10/28/13/09/usa-1777986_1280.jpg",
-    duration: "4:12",
+    title: "Mix 3",
+    artist: "Rihanna, Beyonce ft Shakira",
+    image: "https://i.pinimg.com/736x/78/0e/07/780e079bd81d7b1ddf9b43e89fff59e3.jpg",
+    duration: "4:33",
+    playing: true,
   },
 ]
 
 export default function PlayerScreen({
-  currentSong: initialCurrentSong,
-  currentIndex: initialCurrentIndex,
-  isPlaying: initialIsPlaying,
-  currentTime: initialCurrentTime,
+  currentSong,
+  queue: parentQueue,
+  currentIndex,
+  isPlaying,
+  currentTime,
   onClose,
   onUpdateCurrentSong,
   onUpdatePlayingState,
   onUpdateCurrentTime,
+  onUpdateQueue,
+  onShuffleQueue,
 }) {
-  const [currentSong, setCurrentSong] = useState(initialCurrentSong)
-  const [currentIndex, setCurrentIndex] = useState(initialCurrentIndex)
-  const [isPlaying, setIsPlaying] = useState(initialIsPlaying)
-  const [currentTime, setCurrentTime] = useState(initialCurrentTime || 0)
   const [repeatMode, setRepeatMode] = useState(0) // 0: off, 1: repeat all, 2: repeat one
   const [isShuffled, setIsShuffled] = useState(false)
   const [showQueue, setShowQueue] = useState(false)
 
-  // Update local state when props change
-  useEffect(() => {
-    setCurrentSong(initialCurrentSong)
-    setCurrentIndex(initialCurrentIndex)
-    setIsPlaying(initialIsPlaying)
-    if (initialCurrentTime !== undefined) {
-      setCurrentTime(initialCurrentTime)
-    }
-  }, [initialCurrentSong, initialCurrentIndex, initialIsPlaying, initialCurrentTime])
-
-  // Progress timer effect - sync with parent
-  useEffect(() => {
-    let interval = null
-
-    if (isPlaying) {
-      interval = setInterval(() => {
-        setCurrentTime((prevTime) => {
-          const newTime = prevTime + 1
-          const totalSeconds = durationToSeconds(currentSong.duration)
-
-          // Update parent component
-          if (onUpdateCurrentTime) {
-            onUpdateCurrentTime(newTime)
-          }
-
-          // If song is finished, move to next song
-          if (newTime >= totalSeconds) {
-            handleNext()
-            return 0
-          }
-
-          return newTime
-        })
-      }, 1000) // Update every second
-    } else {
-      clearInterval(interval)
-    }
-
-    return () => clearInterval(interval)
-  }, [isPlaying, currentSong.duration])
-
-  // Reset timer when song changes
-  useEffect(() => {
-    setCurrentTime(0)
-    if (onUpdateCurrentTime) {
-      onUpdateCurrentTime(0)
-    }
-  }, [currentSong.id])
+  // Use the queue from props or fallback to local queue
+  const currentQueue = parentQueue || queue
 
   // Convert duration string to seconds
   const durationToSeconds = (duration) => {
@@ -157,103 +117,77 @@ export default function PlayerScreen({
   const totalSeconds = durationToSeconds(currentSong.duration)
   const progress = (currentTime / totalSeconds) * 100
 
-  const updateSong = (song, index) => {
-    setCurrentSong(song)
-    setCurrentIndex(index)
-    onUpdateCurrentSong(song, index)
-  }
+  // ✅ FIXED: Direct state update for play/pause
+  const handlePlayPause = useCallback(() => {
+    onUpdatePlayingState(!isPlaying)
+  }, [onUpdatePlayingState, isPlaying])
 
-  const updatePlayState = (playing) => {
-    setIsPlaying(playing)
-    onUpdatePlayingState(playing)
-  }
-
-  const handlePlayPause = () => {
-    const newPlayingState = !isPlaying
-    updatePlayState(newPlayingState)
-
-    if (newPlayingState) {
-      console.log("Playing audio...")
-    } else {
-      console.log("Pausing audio...")
-    }
-  }
-
-  const getNextSongIndex = () => {
+  const getNextSongIndex = useCallback(() => {
     if (repeatMode === 2) {
       return currentIndex // Stay on the same song
     }
-
     if (isShuffled) {
       let nextIndex
       do {
-        nextIndex = Math.floor(Math.random() * queue.length)
-      } while (nextIndex === currentIndex && queue.length > 1)
+        nextIndex = Math.floor(Math.random() * currentQueue.length)
+      } while (nextIndex === currentIndex && currentQueue.length > 1)
       return nextIndex
     }
-
-    if (currentIndex === queue.length - 1) {
+    if (currentIndex === currentQueue.length - 1) {
       return repeatMode === 1 ? 0 : currentIndex
     }
     return currentIndex + 1
-  }
+  }, [repeatMode, currentIndex, isShuffled, currentQueue.length])
 
-  const getPreviousSongIndex = () => {
+  const getPreviousSongIndex = useCallback(() => {
     if (repeatMode === 2) {
       return currentIndex
     }
-
     if (isShuffled) {
       let prevIndex
       do {
-        prevIndex = Math.floor(Math.random() * queue.length)
-      } while (prevIndex === currentIndex && queue.length > 1)
+        prevIndex = Math.floor(Math.random() * currentQueue.length)
+      } while (prevIndex === currentIndex && currentQueue.length > 1)
       return prevIndex
     }
-
     if (currentIndex === 0) {
-      return repeatMode === 1 ? queue.length - 1 : 0
+      return repeatMode === 1 ? currentQueue.length - 1 : 0
     }
     return currentIndex - 1
-  }
+  }, [repeatMode, currentIndex, isShuffled, currentQueue.length])
 
-  const handleNext = () => {
+  // ✅ FIXED: Direct implementation for next song
+  const handleNext = useCallback(() => {
     const nextIndex = getNextSongIndex()
-    const nextSong = queue[nextIndex]
+    const nextSong = currentQueue[nextIndex]
+    onUpdateCurrentSong(nextSong, nextIndex)
+    onUpdateCurrentTime(0)
+    onUpdatePlayingState(true)
+  }, [getNextSongIndex, currentQueue, onUpdateCurrentSong, onUpdateCurrentTime, onUpdatePlayingState])
 
-    updateSong(nextSong, nextIndex)
-    setCurrentTime(0) // Reset timer
-    if (onUpdateCurrentTime) {
-      onUpdateCurrentTime(0)
-    }
-    updatePlayState(true)
-  }
-
-  const handlePrevious = () => {
+  // ✅ FIXED: Direct implementation for previous song
+  const handlePrevious = useCallback(() => {
     if (currentTime > 3) {
-      setCurrentTime(0)
-      if (onUpdateCurrentTime) {
-        onUpdateCurrentTime(0)
-      }
+      onUpdateCurrentTime(0)
     } else {
       const prevIndex = getPreviousSongIndex()
-      const prevSong = queue[prevIndex]
-
-      updateSong(prevSong, prevIndex)
-      setCurrentTime(0) // Reset timer
-      if (onUpdateCurrentTime) {
-        onUpdateCurrentTime(0)
-      }
-      updatePlayState(true)
+      const prevSong = currentQueue[prevIndex]
+      onUpdateCurrentSong(prevSong, prevIndex)
+      onUpdateCurrentTime(0)
+      onUpdatePlayingState(true)
     }
-  }
+  }, [currentTime, getPreviousSongIndex, currentQueue, onUpdateCurrentSong, onUpdateCurrentTime, onUpdatePlayingState])
 
   const handleRepeat = () => {
     setRepeatMode((prev) => (prev + 1) % 3)
   }
 
   const handleShuffle = () => {
-    setIsShuffled(!isShuffled)
+    const newShuffleState = !isShuffled
+    setIsShuffled(newShuffleState)
+    if (onShuffleQueue) {
+      onShuffleQueue(newShuffleState)
+    }
   }
 
   const handleShare = async () => {
@@ -268,26 +202,21 @@ export default function PlayerScreen({
   }
 
   const handleQueueSongSelect = (song, index) => {
-    updateSong(song, index)
-    setCurrentTime(0) // Reset timer
-    if (onUpdateCurrentTime) {
-      onUpdateCurrentTime(0)
-    }
-    updatePlayState(true)
+    onUpdateCurrentSong(song, index)
+    onUpdateCurrentTime(0)
+    onUpdatePlayingState(true)
     setShowQueue(false)
   }
 
   const getUpNextSongs = () => {
     const upNext = []
-    const maxSongs = Math.min(3, queue.length - 1)
-
+    const maxSongs = Math.min(3, currentQueue.length - 1)
     for (let i = 1; i <= maxSongs; i++) {
-      const nextIndex = (currentIndex + i) % queue.length
+      const nextIndex = (currentIndex + i) % currentQueue.length
       if (nextIndex !== currentIndex) {
-        upNext.push(queue[nextIndex])
+        upNext.push(currentQueue[nextIndex])
       }
     }
-
     return upNext
   }
 
@@ -305,7 +234,6 @@ export default function PlayerScreen({
   const renderQueueItem = (item, index) => {
     const isCurrentSong = index === currentIndex
     const isCurrentlyPlaying = isCurrentSong && isPlaying
-
     return (
       <TouchableOpacity
         key={`${item.id}-${index}`}
@@ -343,7 +271,7 @@ export default function PlayerScreen({
           </TouchableOpacity>
           <View style={styles.headerCenter}>
             <Text style={styles.headerTitle}>In Queue</Text>
-            <Text style={styles.headerSubtitle}>{queue.length} songs</Text>
+            <Text style={styles.headerSubtitle}>{currentQueue.length} songs</Text>
           </View>
           <TouchableOpacity style={styles.headerButton}>
             <MoreHorizontal size={28} color="white" />
@@ -352,15 +280,15 @@ export default function PlayerScreen({
 
         <View style={styles.queueInfo}>
           <Text style={styles.nowPlayingLabel}>Now Playing</Text>
-          {queue[currentIndex] && (
+          {currentQueue[currentIndex] && (
             <View style={styles.nowPlayingContainer}>
-              <Image source={{ uri: queue[currentIndex].image }} style={styles.nowPlayingImage} />
+              <Image source={{ uri: currentQueue[currentIndex].image }} style={styles.nowPlayingImage} />
               <View style={styles.nowPlayingInfo}>
                 <Text style={styles.nowPlayingTitle} numberOfLines={1}>
-                  {queue[currentIndex].title}
+                  {currentQueue[currentIndex].title}
                 </Text>
                 <Text style={styles.nowPlayingArtist} numberOfLines={1}>
-                  {queue[currentIndex].artist}
+                  {currentQueue[currentIndex].artist}
                 </Text>
               </View>
               {isPlaying && <BarChart3 size={24} color="#b18aff" />}
@@ -371,7 +299,7 @@ export default function PlayerScreen({
         <View style={styles.upNextSection}>
           <Text style={styles.upNextLabel}>Up Next</Text>
           <ScrollView style={styles.queueList} showsVerticalScrollIndicator={false}>
-            {queue.map((item, index) => {
+            {currentQueue.map((item, index) => {
               if (index === currentIndex) return null
               return renderQueueItem(item, index)
             })}
@@ -394,7 +322,7 @@ export default function PlayerScreen({
 
       <View style={styles.albumArtContainer}>
         <Image source={{ uri: currentSong.image }} style={styles.albumArt} />
-        <Text style={styles.lyrics}>Let me see the dark sides as well as the bright</Text>
+        <Text style={styles.lyrics}>Play</Text>
       </View>
 
       <TouchableOpacity style={styles.connectDeviceButton}>
@@ -421,7 +349,7 @@ export default function PlayerScreen({
 
       <View style={styles.progressContainer}>
         <View style={styles.progressBar}>
-          <View style={[styles.progress, { width: `${progress}%` }]} />
+          <View style={[styles.progress, { width: `${Math.max(0, Math.min(100, progress))}%` }]} />
         </View>
         <View style={styles.progressLabels}>
           <Text style={styles.progressText}>{secondsToDuration(currentTime)}</Text>
@@ -436,38 +364,57 @@ export default function PlayerScreen({
         <TouchableOpacity onPress={handlePrevious}>
           <SkipBack size={32} color="white" />
         </TouchableOpacity>
-
         <TouchableOpacity style={styles.playButton} onPress={handlePlayPause}>
           {isPlaying ? <Pause size={40} color="black" fill="black" /> : <Play size={40} color="black" fill="black" />}
         </TouchableOpacity>
-
         <TouchableOpacity onPress={handleNext}>
           <SkipForward size={32} color="white" />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleRepeat}>{renderRepeatIcon()}</TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.upNextContainer} onPress={() => setShowQueue(true)}>
+      <TouchableOpacity
+        style={styles.upNextContainer}
+        onPress={() => {
+          // Get the next song and play it
+          const nextIndex = getNextSongIndex()
+          const nextSong = currentQueue[nextIndex]
+          onUpdateCurrentSong(nextSong, nextIndex)
+          onUpdateCurrentTime(0)
+          onUpdatePlayingState(true)
+        }}
+      >
         <View style={styles.upNextHeader}>
           <Text style={styles.upNextTitle}>Up Next</Text>
-          <View style={styles.queueButton}>
+          <TouchableOpacity style={styles.queueButton} onPress={() => setShowQueue(true)}>
             <Text style={styles.queueButtonText}>Queue</Text>
             <ChevronRight size={16} color="white" />
-          </View>
+          </TouchableOpacity>
         </View>
-
         {getUpNextSongs()
           .slice(0, 1)
-          .map((nextSong, index) => (
-            <View key={`${nextSong.id}-${index}`} style={styles.nextSongContainer}>
-              <Image source={{ uri: nextSong.image }} style={styles.nextSongImage} />
-              <View style={styles.nextSongInfo}>
-                <Text style={styles.nextSongTitle}>{nextSong.title}</Text>
-                <Text style={styles.nextSongArtist}>{nextSong.artist}</Text>
-              </View>
-              <Text style={styles.nextSongDuration}>{nextSong.duration}</Text>
-            </View>
-          ))}
+          .map((nextSong, index) => {
+            const actualIndex = (currentIndex + 1) % currentQueue.length
+            return (
+              <TouchableOpacity
+                key={`${nextSong.id}-${index}`}
+                style={styles.nextSongContainer}
+                onPress={() => {
+                  onUpdateCurrentSong(nextSong, actualIndex)
+                  onUpdateCurrentTime(0)
+                  onUpdatePlayingState(true)
+                }}
+                activeOpacity={0.7}
+              >
+                <Image source={{ uri: nextSong.image }} style={styles.nextSongImage} />
+                <View style={styles.nextSongInfo}>
+                  <Text style={styles.nextSongTitle}>{nextSong.title}</Text>
+                  <Text style={styles.nextSongArtist}>{nextSong.artist}</Text>
+                </View>
+                <Text style={styles.nextSongDuration}>{nextSong.duration}</Text>
+              </TouchableOpacity>
+            )
+          })}
       </TouchableOpacity>
     </ScrollView>
   )
