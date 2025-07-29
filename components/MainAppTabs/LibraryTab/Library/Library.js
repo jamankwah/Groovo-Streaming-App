@@ -116,7 +116,7 @@ const LibraryScreen = () => {
         style={[styles.libraryCard, { backgroundColor: item.color + "20" }]}
         onPress={() => handleLibraryItemPress(item)}
         activeOpacity={0.8}
-      />
+      >
         <View style={[styles.iconContainer, { backgroundColor: item.color }]}>
           <IconComponent size={24} color="#FFFFFF" />
         </View>
