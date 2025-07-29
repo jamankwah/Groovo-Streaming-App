@@ -1,19 +1,21 @@
 "use client"
-
-import { useRef, useState, useEffect } from "react"
-import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, StatusBar, Modal } from "react-native"
+import { useNavigation } from "@react-navigation/native"
+import { Audio } from "expo-av"
 import { BlurView } from "expo-blur"
-import { Bell, Play, Pause, SkipForward } from "lucide-react-native"
-import PlayerScreen from "./MiniPlayer"
-import { useNavigation } from '@react-navigation/native';
+import { Bell, Pause, Play, SkipForward } from "lucide-react-native"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { FlatList, Image, Modal, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native"
+import PlayerScreen from "../screens/MiniPlayer"
+
+
+
 
 const queue = [
   {
     id: "1",
-    title: "Inside Out",
-    artist: "The Chainsmokers, Charlee",
-    image:
-      "https://upload.wikimedia.org/wikipedia/en/thumb/4/48/TheChainsmokersInsideOut.jpg/250px-TheChainsmokersInsideOut.jpg",
+    title: "Lomo Lomo",
+    artist: "Kidi,Black Sherif",
+    image: "https://ghmusicplus.com/wp-content/uploads/2024/08/IMG_2615-750x430.jpg",
     duration: "3:15",
     playing: true,
   },
@@ -21,42 +23,45 @@ const queue = [
     id: "2",
     title: "Young",
     artist: "The Chainsmokers",
-    image: "https://cdn.pixabay.com/photo/2016/08/24/20/39/merry-christmas-1617972_1280.jpg",
+    image: "https://i1.sndcdn.com/artworks-000241184161-2zadh9-t1080x1080.jpg",
     duration: "3:42",
   },
   {
     id: "3",
-    title: "Beach House",
-    artist: "The Chainsmokers - Sick",
-    image: "https://cdn.pixabay.com/photo/2020/10/13/13/28/ameland-5651866_1280.jpg",
+    title: "Humble",
+    artist: "Kendrick Lamar",
+    image:
+      "https://i2-prod.birminghammail.co.uk/incoming/article32110373.ece/ALTERNATES/s810/0_GettyImages-2199018586.jpg",
     duration: "4:01",
   },
   {
     id: "4",
-    title: "Kills You Slowly",
-    artist: "The Chainsmokers -",
-    image: "https://cdn.pixabay.com/photo/2015/01/28/09/50/death-614644_1280.jpg",
+    title: "Zenzele",
+    artist: "Uncle waffles",
+    image:
+      "https://www.okayafrica.com/media-library/uncle-waffles.jpg?id=35792104&width=1200&height=800&quality=80&coordinates=0%2C0%2C0%2C0",
     duration: "3:28",
   },
   {
     id: "5",
-    title: "Setting Fires",
-    artist: "The Chainsmokers, XYLO -",
-    image: "https://cdn.pixabay.com/photo/2022/07/19/20/11/fire-7332965_1280.jpg",
+    title: "Shake it to the max",
+    artist: "Molly",
+    image: "https://www.3music.tv/uploads/news/11398655312025.jpeg",
     duration: "3:33",
   },
   {
     id: "6",
-    title: "Somebody",
-    artist: "The Chainsmokers, Drew",
-    image: "https://cdn.pixabay.com/photo/2024/11/20/09/14/christmas-9210799_1280.jpg",
+    title: "Hot body , Dynamite",
+    artist: "Ayra starr, Tyla ft Wizkid",
+    image:
+      "https://imgix.bustle.com/uploads/image/2024/6/6/e8a94f4a/africanstars.jpg?w=1200&h=1200&fit=crop&crop=focalpoint&fm=jpg&fp-x=0.4875&fp-y=0.1622",
     duration: "3:18",
   },
   {
     id: "7",
-    title: "New York City",
-    artist: "The Chainsmokers -",
-    image: "https://cdn.pixabay.com/photo/2016/10/28/13/09/usa-1777986_1280.jpg",
+    title: "mandown , Beautiful liar",
+    artist: "Rihanna, Beyonce ft Shakira",
+    image: "https://i.pinimg.com/736x/78/0e/07/780e079bd81d7b1ddf9b43e89fff59e3.jpg",
     duration: "4:12",
   },
 ]
@@ -64,10 +69,9 @@ const queue = [
 const recentlyPlayed = [
   {
     id: "1",
-    title: "Inside Out",
-    artist: "The Chainsmokers, Charlee",
-    image:
-      "https://upload.wikimedia.org/wikipedia/en/thumb/4/48/TheChainsmokersInsideOut.jpg/250px-TheChainsmokersInsideOut.jpg",
+    title: "Lomo Lomo",
+    artist: "Kidi,Black Sherif",
+    image: "https://ghmusicplus.com/wp-content/uploads/2024/08/IMG_2615-750x430.jpg",
     duration: "3:15",
   },
   {
@@ -79,17 +83,18 @@ const recentlyPlayed = [
   },
   {
     id: "3",
-    title: "Beach House",
-    artist: "The Chainsmokers",
-    image: "https://i.scdn.co/image/ab67616d0000b273febb9ba85ac706e51dda9c86",
+    title: "Humble",
+    artist: "Kendrick Lamar",
+    image:
+      "https://i2-prod.birminghammail.co.uk/incoming/article32110373.ece/ALTERNATES/s810/0_GettyImages-2199018586.jpg",
     duration: "4:01",
   },
   {
     id: "4",
-    title: "Kills You Slowly",
-    artist: "The Chainsmokers",
+    title: "Zenzele",
+    artist: "Uncle waffles",
     image:
-      "https://linkstorage.linkfire.com/medialinks/images/62046946-6826-4abf-839b-8d7166c395bb/artwork-440x440.jpg",
+      "https://www.okayafrica.com/media-library/uncle-waffles.jpg?id=35792104&width=1200&height=800&quality=80&coordinates=0%2C0%2C0%2C0",
     duration: "3:28",
   },
 ]
@@ -100,20 +105,20 @@ const mixesForYou = [
     title: "Mix 1",
     artist: "Molly",
     image: "https://www.3music.tv/uploads/news/11398655312025.jpeg",
-    duration: "2:45",
+    duration: "2:58",
   },
   {
     id: "6",
     title: "Mix 2",
-    artist: "Afro Beat Mix",
+    artist: "Ayra star, Tyla ft Wizkid",
     image:
       "https://imgix.bustle.com/uploads/image/2024/6/6/e8a94f4a/africanstars.jpg?w=1200&h=1200&fit=crop&crop=focalpoint&fm=jpg&fp-x=0.4875&fp-y=0.1622",
-    duration: "3:12",
+    duration: "2:40",
   },
   {
     id: "7",
     title: "Mix 3",
-    artist: "Rihanna, Beyonce, Shakira",
+    artist: "Rihanna, Beyonce ft Shakira",
     image: "https://i.pinimg.com/736x/78/0e/07/780e079bd81d7b1ddf9b43e89fff59e3.jpg",
     duration: "4:33",
   },
@@ -139,7 +144,7 @@ const featuringToday = [
 const followedArtists = [
   {
     id: "10",
-    title: "Super Bowl",
+    title: "Kendrick Lamar, SZA",
     artist: "Kendrick Lamar, SZA",
     image:
       "https://i2-prod.birminghammail.co.uk/incoming/article32110373.ece/ALTERNATES/s810/0_GettyImages-2199018586.jpg",
@@ -205,6 +210,16 @@ const createQueue = () => {
   return queue
 }
 
+const audioMap = {
+  "1": require("../../assets/audio/lomo.mp3"),
+  "2": require("../../assets/audio/young.mp3"),
+  "3": require("../../assets/audio/humble.mp3"),
+  "4": require("../../assets/audio/zenzele.mp3"),
+  "5": require("../../assets/audio/molly.mp3"),
+  "6": require("../../assets/audio/hot.mp3"),
+  "7": require("../../assets/audio/mandown.mp3"),
+}
+
 export default function IndexScreen() {
   const navigation = useNavigation()
   const scrollViewRef = useRef(null)
@@ -212,38 +227,170 @@ export default function IndexScreen() {
   const [queue, setQueue] = useState(createQueue())
   const [currentIndex, setCurrentIndex] = useState(0)
   const [showPlayerModal, setShowPlayerModal] = useState(false)
-  const [currentTime, setCurrentTime] = useState(0) // Add current time state
-
-  // Current song state - always visible player
+  const [currentTime, setCurrentTime] = useState(0)
+  const soundRef = useRef(null)
   const [currentSong, setCurrentSong] = useState(queue[0])
+
+  // ✅ NEW: Function to stop and unload current audio
+  const stopCurrentAudio = useCallback(async () => {
+    if (soundRef.current) {
+      try {
+        const status = await soundRef.current.getStatusAsync()
+        if (status.isLoaded) {
+          await soundRef.current.stopAsync()
+          await soundRef.current.unloadAsync()
+        }
+      } catch (error) {
+        console.warn("Error stopping audio:", error)
+      }
+      soundRef.current = null
+    }
+    setIsPlaying(false)
+  }, [])
+
+  // ✅ NEW: Function to load and play new audio
+  const loadAndPlayAudio = useCallback(async (songId, shouldPlay = true) => {
+    const audioFile = audioMap[songId]
+    if (!audioFile) {
+      console.warn("Audio file not found for song ID:", songId)
+      return false
+    }
+
+    try {
+      const { sound } = await Audio.Sound.createAsync(audioFile, {
+        shouldPlay: shouldPlay,
+      })
+      soundRef.current = sound
+      setIsPlaying(shouldPlay)
+      return true
+    } catch (error) {
+      console.warn("Error loading audio:", error)
+      return false
+    }
+  }, [])
+
+  // ✅ IMPROVED: Enhanced pause/play function
+  const handlePlayPause = useCallback(
+    async (e) => {
+      if (e) e.stopPropagation()
+
+      const sound = soundRef.current
+      if (!sound) {
+        // If no sound is loaded, try to load and play current song
+        await loadAndPlayAudio(currentSong.id, true)
+        return
+      }
+
+      try {
+        const status = await sound.getStatusAsync()
+        if (!status.isLoaded) {
+          // If sound is not loaded, load and play
+          await stopCurrentAudio()
+          await loadAndPlayAudio(currentSong.id, true)
+          return
+        }
+
+        if (isPlaying) {
+          await sound.pauseAsync()
+          setIsPlaying(false)
+        } else {
+          await sound.playAsync()
+          setIsPlaying(true)
+        }
+      } catch (error) {
+        console.warn("Error in play/pause:", error)
+        // Fallback: reload the audio
+        await stopCurrentAudio()
+        await loadAndPlayAudio(currentSong.id, true)
+      }
+    },
+    [isPlaying, currentSong.id, stopCurrentAudio, loadAndPlayAudio],
+  )
+
+  // ✅ IMPROVED: Enhanced song selection function
+  const handleSongSelect = useCallback(
+    async (song) => {
+      const songIndex = queue.findIndex((item) => item.id === song.id)
+      if (songIndex === -1) return
+
+      // If it's the same song, just toggle play/pause
+      if (currentSong.id === song.id) {
+        await handlePlayPause()
+        return
+      }
+
+      // Stop current audio before switching
+      await stopCurrentAudio()
+
+      // Update song state
+      setCurrentIndex(songIndex)
+      setCurrentSong(queue[songIndex])
+      setCurrentTime(0)
+
+      // Load and play new song
+      const success = await loadAndPlayAudio(song.id, true)
+      if (!success) {
+        setIsPlaying(false)
+      }
+    },
+    [queue, currentSong.id, stopCurrentAudio, loadAndPlayAudio, handlePlayPause],
+  )
+
+  // ✅ IMPROVED: Enhanced next function
+  const handleNext = useCallback(
+    async (e) => {
+      if (e) e.stopPropagation()
+
+      const nextIndex = (currentIndex + 1) % queue.length
+      const nextSong = queue[nextIndex]
+
+      // Stop current audio
+      await stopCurrentAudio()
+
+      // Update state
+      setCurrentIndex(nextIndex)
+      setCurrentSong(nextSong)
+      setCurrentTime(0)
+
+      // Load and play next song
+      const success = await loadAndPlayAudio(nextSong.id, true)
+      if (!success) {
+        setIsPlaying(false)
+      }
+    },
+    [currentIndex, queue, stopCurrentAudio, loadAndPlayAudio],
+  )
 
   // Progress timer effect for miniplayer
   useEffect(() => {
     let interval = null
-
     if (isPlaying) {
       interval = setInterval(() => {
         setCurrentTime((prevTime) => {
           const newTime = prevTime + 1
           const totalSeconds = durationToSeconds(currentSong.duration)
-
           // If song is finished, move to next song
           if (newTime >= totalSeconds) {
             handleNext()
             return 0
           }
-
           return newTime
         })
       }, 1000) // Update every second
     } else {
       clearInterval(interval)
     }
-
     return () => clearInterval(interval)
-  }, [isPlaying, currentSong.duration])
+  }, [isPlaying, currentSong.duration, handleNext])
 
-  // Reset timer when song changes
+  // Cleanup effect
+  useEffect(() => {
+    return () => {
+      stopCurrentAudio()
+    }
+  }, [stopCurrentAudio])
+
+  // Reset current time when song changes
   useEffect(() => {
     setCurrentTime(0)
   }, [currentSong.id])
@@ -258,12 +405,6 @@ export default function IndexScreen() {
   const totalSeconds = durationToSeconds(currentSong.duration)
   const progress = (currentTime / totalSeconds) * 100
 
-  const handlePlayPause = (e) => {
-    e.stopPropagation() // Prevent navigation when clicking play/pause
-    setIsPlaying(!isPlaying)
-    console.log(isPlaying ? "Pausing audio..." : "Playing audio...")
-  }
-
   const handlePlayerNavigation = () => {
     setShowPlayerModal(true)
   }
@@ -273,27 +414,7 @@ export default function IndexScreen() {
   }
 
   const handleProfileNavigation = () => {
-    navigation.navigate('SettingsScreen')
-  }
-
-  const handleSongSelect = (song) => {
-    const songIndex = queue.findIndex((item) => item.id === song.id)
-    if (songIndex !== -1) {
-      setCurrentIndex(songIndex)
-      setCurrentSong(queue[songIndex])
-      setCurrentTime(0) // Reset timer
-      setIsPlaying(true)
-      console.log(`Now playing: ${song.title}`)
-    }
-  }
-
-  const handleNext = (e) => {
-    if (e) e.stopPropagation()
-    const nextIndex = (currentIndex + 1) % queue.length
-    setCurrentIndex(nextIndex)
-    setCurrentSong(queue[nextIndex])
-    setCurrentTime(0) // Reset timer
-    setIsPlaying(true)
+    navigation.navigate("SettingsScreen")
   }
 
   // Functions to pass to PlayerScreen for state updates
@@ -322,14 +443,12 @@ export default function IndexScreen() {
       const otherSongs = queue.filter((_, index) => index !== currentIndex)
       const shuffledOthers = [...otherSongs].sort(() => Math.random() - 0.5)
       const newQueue = [currentSongItem, ...shuffledOthers]
-
       setQueue(newQueue)
       setCurrentIndex(0) // Current song is now at index 0
     } else {
       // Restore original queue order
       const originalQueue = createQueue()
       setQueue(originalQueue)
-
       // Find the current song in the original queue
       const originalIndex = originalQueue.findIndex((song) => song.id === currentSong.id)
       setCurrentIndex(originalIndex !== -1 ? originalIndex : 0)
@@ -505,7 +624,6 @@ export default function IndexScreen() {
         <View style={styles.miniProgressBar}>
           <View style={[styles.miniProgress, { width: `${progress}%` }]} />
         </View>
-
         <TouchableOpacity style={styles.playerContent} onPress={handlePlayerNavigation} activeOpacity={0.8}>
           <Image source={{ uri: currentSong.image }} style={styles.playerAlbumArt} />
           <View style={styles.playerInfo}>
@@ -556,87 +674,81 @@ export default function IndexScreen() {
   )
 }
 
-const styles = StyleSheet.create({
+// Add your styles here - you'll need to define the styles object
+const styles = {
   container: {
     flex: 1,
-    backgroundColor: "#000000",
-    paddingTop: 50,
+    backgroundColor: "#000",
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    marginBottom: 20,
+    paddingTop: 60,
+    paddingBottom: 20,
   },
   greeting: {
-    color: "#fff",
-    fontSize: 18,
-  },
-  evening: {
-    color: "#fff",
+    color: "white",
     fontSize: 24,
     fontWeight: "bold",
+  },
+  evening: {
+    color: "#888",
+    fontSize: 16,
   },
   headerIcons: {
     flexDirection: "row",
     alignItems: "center",
   },
   icon: {
-    marginHorizontal: 10,
+    marginRight: 15,
   },
-  profileContainer: { alignItems: "center", marginLeft: 15 },
-  profileCircleButton: { width: 40, height: 40, borderRadius: 20, overflow: "hidden" },
-  profileCircleImage: { width: "100%", height: "100%" },
-  profileText: { color: "white", fontSize: 12, marginTop: 4 },
+  profileContainer: {
+    alignItems: "center",
+  },
+  profileCircleButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    overflow: "hidden",
+  },
+  profileCircleImage: {
+    width: "100%",
+    height: "100%",
+  },
+  profileText: {
+    color: "white",
+    fontSize: 12,
+    marginTop: 4,
+  },
   chipsContainer: {
-    flexDirection: "row",
     paddingHorizontal: 20,
     marginBottom: 20,
   },
   chip: {
-    paddingVertical: 8,
     paddingHorizontal: 16,
+    paddingVertical: 8,
     borderRadius: 20,
+    backgroundColor: "#333",
     marginRight: 10,
-    backgroundColor: "#282828",
   },
   activeChip: {
-    backgroundColor: "#444",
+    backgroundColor: "#1DB954",
   },
   chipText: {
-    color: "#fff",
+    color: "#888",
+    fontSize: 14,
   },
   activeChipText: {
-    fontWeight: "bold",
+    color: "white",
   },
   sectionTitle: {
-    color: "#fff",
-    fontSize: 22,
+    color: "white",
+    fontSize: 20,
     fontWeight: "bold",
     paddingHorizontal: 20,
     marginBottom: 15,
-  },
-  featuredCard: {
-    width: 280,
-    height: 160,
-    marginRight: 15,
-    borderRadius: 10,
-    overflow: "hidden",
-    position: "relative",
-    marginLeft: 20,
-  },
-  featuredImage: {
-    width: "100%",
-    height: "100%",
-  },
-  featuredText: {
-    position: "absolute",
-    bottom: 10,
-    left: 10,
-    color: "#fff",
-    fontSize: 20,
-    fontWeight: "bold",
   },
   sectionHeader: {
     flexDirection: "row",
@@ -644,95 +756,97 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
     marginBottom: 15,
-    marginTop: 10,
   },
   seeMore: {
-    color: "#aaa",
+    color: "#888",
+    fontSize: 14,
   },
-  songCard: {
-    width: 120,
-    marginRight: 15,
-    alignItems: "center",
-    position: "relative",
+  featuredCard: {
     marginLeft: 20,
+    width: 200,
   },
-  songImage: {
-    width: 120,
+  featuredImage: {
+    width: 200,
     height: 120,
     borderRadius: 10,
   },
-  playIconContainer: {
-    position: "absolute",
-    top: 45,
-    left: 45,
-    backgroundColor: "rgba(0,0,0,0.7)",
-    borderRadius: 20,
-    width: 30,
-    height: 30,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  songTitle: {
-    color: "#fff",
+  featuredText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
     marginTop: 8,
-    textAlign: "center",
   },
-  mixCard: {
-    width: 160,
-    marginRight: 15,
+  songCard: {
     marginLeft: 20,
-  },
-  mixImageContainer: {
-    width: 160,
-    height: 160,
-    borderRadius: 10,
-    overflow: "hidden",
+    width: 150,
     position: "relative",
   },
-  mixImage: {
-    width: "100%",
-    height: "100%",
-  },
-  mixTitleContainer: {
-    position: "absolute",
-    bottom: 8,
-    right: 8,
-    backgroundColor: "rgba(0,0,0,0.6)",
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 5,
-  },
-  mixTitle: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 14,
-  },
-  mixArtists: {
-    color: "#B3B3B3",
-    fontSize: 14,
-    marginTop: 8,
-    height: 40,
-  },
-  artistSectionCard: {
-    width: 150,
-    marginRight: 15,
-    marginLeft: 20,
-  },
-  artistSectionImage: {
+  songImage: {
     width: 150,
     height: 150,
     borderRadius: 10,
   },
-  artistSectionTitle: {
-    color: "#B3B3B3",
+  playIconContainer: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    backgroundColor: "rgba(0,0,0,0.7)",
+    borderRadius: 15,
+    padding: 5,
+  },
+  songTitle: {
+    color: "white",
     fontSize: 14,
+    fontWeight: "bold",
     marginTop: 8,
-    height: 40,
+  },
+  mixCard: {
+    marginLeft: 20,
+    width: 150,
+  },
+  mixImageContainer: {
+    position: "relative",
+  },
+  mixImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 10,
+  },
+  mixTitleContainer: {
+    position: "absolute",
+    bottom: 10,
+    left: 10,
+    right: 10,
+  },
+  mixTitle: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  mixArtists: {
+    color: "#888",
+    fontSize: 12,
+    marginTop: 5,
+  },
+  artistSectionCard: {
+    marginLeft: 20,
+    width: 150,
+  },
+  artistSectionImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+  },
+  artistSectionTitle: {
+    color: "white",
+    fontSize: 14,
+    fontWeight: "bold",
+    marginTop: 8,
+    textAlign: "center",
   },
   playlistCard: {
-    width: 150,
-    marginRight: 15,
     marginLeft: 20,
+    width: 150,
   },
   playlistImage: {
     width: 150,
@@ -742,6 +856,7 @@ const styles = StyleSheet.create({
   playlistTitle: {
     color: "white",
     fontSize: 14,
+    fontWeight: "bold",
     marginTop: 8,
   },
   playerContainer: {
@@ -749,55 +864,44 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    borderTopWidth: 1,
-    borderTopColor: "rgba(255,255,255,0.1)",
-    overflow: "hidden",
+    backgroundColor: "rgba(0,0,0,0.8)",
   },
   miniProgressBar: {
     height: 2,
-    backgroundColor: "rgba(255,255,255,0.2)",
-    width: "100%",
+    backgroundColor: "rgba(255,255,255,0.3)",
   },
   miniProgress: {
-    height: 2,
-    backgroundColor: "white",
+    height: "100%",
+    backgroundColor: "#1DB954",
   },
   playerContent: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 12,
+    padding: 15,
   },
   playerAlbumArt: {
-    width: 48,
-    height: 48,
-    borderRadius: 8,
-    marginRight: 12,
+    width: 50,
+    height: 50,
+    borderRadius: 5,
   },
   playerInfo: {
     flex: 1,
-    marginRight: 12,
+    marginLeft: 15,
   },
   playerTitle: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "600",
-    marginBottom: 2,
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   playerArtist: {
-    color: "#B3B3B3",
-    fontSize: 12,
+    color: "#888",
+    fontSize: 14,
   },
   playerControls: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
   },
   controlButton: {
-    padding: 8,
+    marginLeft: 15,
   },
-  highlightedCard: {
-    borderColor: "#DDA0DD",
-    borderWidth: 2,
-    borderRadius: 12,
-  },
-})
+}
