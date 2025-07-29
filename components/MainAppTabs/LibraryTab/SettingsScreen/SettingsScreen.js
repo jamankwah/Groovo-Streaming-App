@@ -19,11 +19,13 @@ const PROFILE_IMAGE_URL = "https://cdn.pixabay.com/photo/2025/07/21/19/22/woman-
 
 const SettingsScreen = ({navigation}) => {
   const router = useRouter()
-  const [showLyrics, setShowLyrics] = useState(true)
+
+const PROFILE_IMAGE_URL = "https://cdn.pixabay.com/photo/2025/07/21/19/22/woman-9727004_1280.jpg"
+
 
   const handleBackPress = () => {
     navigation.goBack()
-   
+
   }
 
    const handleLanguagePress = () => {

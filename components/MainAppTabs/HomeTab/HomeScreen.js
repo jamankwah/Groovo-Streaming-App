@@ -1,6 +1,5 @@
 "use client"
 
-import { useRouter } from "expo-router"
 import { useRef, useState, useEffect } from "react"
 import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, StatusBar, Modal } from "react-native"
 import { BlurView } from "expo-blur"
@@ -207,8 +206,7 @@ const createQueue = () => {
 }
 
 export default function IndexScreen() {
-  const navigation = useNavigation();
-  const router = useRouter()
+  const navigation = useNavigation()
   const scrollViewRef = useRef(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [queue, setQueue] = useState(createQueue())
