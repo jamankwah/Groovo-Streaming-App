@@ -10,68 +10,81 @@ import {
   ImageBackground,
 } from 'react-native';
 import { ArrowLeft, Play, MoveVertical as MoreVertical, Download, Heart } from 'lucide-react-native';
+import { useAudio } from '../AudioContext';
 
 const AlbumScreen = ({ navigation }) => {
+  const { currentlyPlaying, playTrack } = useAudio();
+
   const albumTracks = [
     {
       id: 1,
       title: 'Are You Gone Already',
-      duration: '2:45',
+      duration: '4:30',
       isExplicit: true,
+      audioFile: require('../assets/audio/areyougonealready.mp3'), // Make sure this file exists
     },
     {
       id: 2,
       title: 'Needle (feat. Drake)',
-      duration: '4:12',
+      duration: '3:55',
       isExplicit: true,
+      audioFile: require('../assets/audio/needle.mp3'), // Make sure this file exists
     },
     {
       id: 3,
       title: 'FTCU',
-      duration: '2:58',
+      duration: '2:52',
       isExplicit: true,
+      audioFile: require('../assets/audio/FTCU.mp3'), // Add your audio file here
     },
     {
       id: 4,
       title: 'Bahm Bahm (feat. Lil Wayne)',
-      duration: '3:24',
+      duration: '2:21',
       isExplicit: true,
+      audioFile: require('../assets/audio/bahmbahm.mp3'), // Add your audio file here
     },
     {
       id: 5,
       title: 'Everybody (feat. Lil Uzi Vert)',
-      duration: '3:15',
+      duration: '3:01',
       isExplicit: true,
+      audioFile: require('../assets/audio/everybody.mp3'), // Add your audio file here
     },
     {
       id: 6,
       title: 'RNB (feat. Lil Wayne)',
-      duration: '3:42',
+      duration: '3:04',
       isExplicit: true,
+      audioFile: require('../assets/audio/rnb.mp3'), // Add your audio file here
     },
     {
       id: 7,
       title: 'Pink Birthday',
-      duration: '2:33',
+      duration: '2:08',
       isExplicit: false,
+      audioFile: require('../assets/audio/pinkbirthday.mp3'), // Add your audio file here
     },
     {
       id: 8,
       title: 'Cowgirl',
-      duration: '3:18',
+      duration: '3:36',
       isExplicit: true,
+      audioFile: require('../assets/audio/cowgirl.mp3'), // Add your audio file here
     },
     {
       id: 9,
       title: 'Just The Memories',
-      duration: '4:05',
+      duration: '3:55',
       isExplicit: false,
+      audioFile: require('../assets/audio/justthememories.mp3'), // Add your audio file here
     },
     {
       id: 10,
       title: 'Pink Friday Girls',
-      duration: '3:51',
+      duration: '2:46',
       isExplicit: true,
+      audioFile: require('../assets/audio/pinkfridaygirls.mp3'), // Add your audio file here
     },
   ];
 
@@ -80,30 +93,43 @@ const AlbumScreen = ({ navigation }) => {
       id: 1,
       title: 'Queen',
       year: '2018',
-      image: require('../../../assets/images/album/queen.jpg'),
+      image: require('../assets/images/album/queen.jpg'),
     },
     {
       id: 2,
       title: 'The Pinkprint',
       year: '2014',
-      image: require('../../../assets/images/album/pinkprint.jpg'),
+      image: require('../assets/images/album/pinkprint.jpg'),
     },
     {
       id: 3,
       title: 'Roman Reloaded',
       year: '2012',
-      image: require('../../../assets/images/album/roman.jpg'),
+      image: require('../assets/images/album/roman.jpg'),
     },
   ];
 
   const renderTrack = (item, index) => (
-    <TouchableOpacity key={item.id} style={styles.trackItem}>
+    <TouchableOpacity 
+      key={item.id} 
+      style={styles.trackItem}
+      onPress={() => playTrack(item, albumTracks)}
+    >
       <View style={styles.trackNumber}>
-        <Text style={styles.trackNumberText}>{index + 1}</Text>
+        {currentlyPlaying === item.id ? (
+          <Play size={16} color="#BB86FC" fill="#BB86FC" />
+        ) : (
+          <Text style={styles.trackNumberText}>{index + 1}</Text>
+        )}
       </View>
       <View style={styles.trackInfo}>
         <View style={styles.trackTitleRow}>
-          <Text style={styles.trackTitle}>{item.title}</Text>
+          <Text style={[
+            styles.trackTitle,
+            currentlyPlaying === item.id && styles.playingTrackTitle
+          ]}>
+            {item.title}
+          </Text>
           {item.isExplicit && (
             <View style={styles.explicitBadge}>
               <Text style={styles.explicitText}>E</Text>
@@ -132,7 +158,7 @@ const AlbumScreen = ({ navigation }) => {
         {/* Hero Section */}
         <View style={styles.heroSection}>
           <ImageBackground
-            source={require('../../../assets/images/album/pinkfriday2.jpg')}
+            source={require('../assets/images/album/pinkfriday2.jpg')}
             style={styles.heroBackground}
             imageStyle={styles.heroImage}
           >
@@ -146,12 +172,15 @@ const AlbumScreen = ({ navigation }) => {
               
               <View style={styles.heroContent}>
                 <Image 
-                  source={require('../../../assets/images/album/pinkfriday2.jpg')}
+                  source={require('../assets/images/album/pinkfriday2.jpg')}
                   style={styles.albumCover}
                 />
                 <Text style={styles.albumTitle}>Pink Friday 2</Text>
                 <Text style={styles.artistName}>Nicki Minaj</Text>
                 <Text style={styles.albumInfo}>Album • 2023 • 22 songs</Text>
+                <View style={styles.demoNotice}>
+                  <Text style={styles.demoText}>🎵 Demo Version - Royalty-free audio for educational purposes</Text>
+                </View>
               </View>
             </View>
           </ImageBackground>
@@ -198,6 +227,7 @@ const AlbumScreen = ({ navigation }) => {
           </ScrollView>
         </View>
       </ScrollView>
+
     </SafeAreaView>
   );
 };
@@ -260,6 +290,21 @@ const styles = StyleSheet.create({
     color: '#888',
     fontSize: 14,
     textAlign: 'center',
+  },
+  demoNotice: {
+    backgroundColor: 'rgba(187, 134, 252, 0.2)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    marginTop: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(187, 134, 252, 0.3)',
+  },
+  demoText: {
+    color: '#BB86FC',
+    fontSize: 12,
+    textAlign: 'center',
+    fontWeight: '500',
   },
   actionSection: {
     paddingHorizontal: 16,
@@ -327,6 +372,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     marginRight: 8,
+  },
+  playingTrackTitle: {
+    color: '#BB86FC',
   },
   explicitBadge: {
     backgroundColor: '#888',

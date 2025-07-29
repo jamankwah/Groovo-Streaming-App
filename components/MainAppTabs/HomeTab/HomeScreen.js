@@ -140,7 +140,7 @@ const featuringToday = [
 const followedArtists = [
   {
     id: "10",
-    title: "Super Ball",
+    title: "Super Bowl",
     artist: "Kendrick Lamar, SZA",
     image:
       "https://i2-prod.birminghammail.co.uk/incoming/article32110373.ece/ALTERNATES/s810/0_GettyImages-2199018586.jpg",
