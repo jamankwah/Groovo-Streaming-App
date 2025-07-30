@@ -131,14 +131,14 @@ const PROFILE_IMAGE_URL = "https://cdn.pixabay.com/photo/2025/07/21/19/22/woman-
         {/* Profile Section */}
         <View style={styles.profileSection}>
           <Image source={{ uri: PROFILE_IMAGE_URL }} style={styles.profileImage} />
-          <Text style={styles.profileName}>Krystal</Text>
+          <Text style={styles.profileName}>Oheneba</Text>
         </View>
 
         {/* Info Section */}
         <View style={styles.infoSection}>
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Email</Text>
-            <Text style={styles.infoValue}>krystal2025@gmail.com</Text>
+            <Text style={styles.infoValue}>ntijunior724@gmail.com</Text>
           </View>
         </View>
 

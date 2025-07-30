@@ -465,7 +465,7 @@ export default function IndexScreen() {
       >
         <View style={styles.header}>
           <View>
-            <Text style={styles.greeting}>👋 Hi Krystal,</Text>
+            <Text style={styles.greeting}>👋 Hi Oheneba,</Text>
             <Text style={styles.evening}>Good day</Text>
           </View>
           <View style={styles.headerIcons}>

@@ -57,17 +57,17 @@ const ProfileScreen = ({ navigation }) => {
             style={styles.avatar}
           />
         </View>
-        <Text style={styles.userName}>Logan Jimmy</Text>
+        <Text style={styles.userName}>Oheneba</Text>
 
         {/* User Details */}
         <View style={styles.userDetails}>
           <View style={styles.detailItem}>
             <Text style={styles.detailLabel}>Email</Text>
-            <Text style={styles.detailValue}>logan.jimmy@email.com</Text>
+            <Text style={styles.detailValue}>ntijunior724@gmail.com</Text>
           </View>
           <View style={styles.detailItem}>
             <Text style={styles.detailLabel}>Phone Number</Text>
-            <Text style={styles.detailValue}>+1 234 567 8900</Text>
+            <Text style={styles.detailValue}>+233 531 296 383</Text>
           </View>
         </View>
       </View>

@@ -33,7 +33,7 @@ const LibraryScreen = () => {
     {
       id: "2",
       title: "Downloads",
-      count: "210 songs",
+      count: "10 songs",
       icon: Download,
       color: "#10B981",
       bgGradient: ["#10B981", "#059669"],
