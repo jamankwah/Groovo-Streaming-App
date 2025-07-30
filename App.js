@@ -1,6 +1,8 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { AudioProvider } from './components/MainAppTabs/SearchTab/AudioContext';
+import GlobalMiniPlayer from './components/MainAppTabs/SearchTab/GlobalMiniPlayer';
 import Login from './components/Authentication/Login/Login';
 import Register from './components/Authentication/Register/Register';
 import ForgotPassword from './components/Authentication/ForgotPassword/EnterDetails';
@@ -32,6 +34,7 @@ const Stack = createStackNavigator();
 
 export default function App() {
   return (
+    <AudioProvider>
     <NavigationContainer>
       <Stack.Navigator
 
@@ -73,6 +76,8 @@ export default function App() {
         <Stack.Screen name="Playlist" component={PlaylistScreen} />
         <Stack.Screen name="OldOnboarding" component={OldOnboarding} />
       </Stack.Navigator>
+      <GlobalMiniPlayer />
     </NavigationContainer>
+    </AudioProvider>
   );
 }

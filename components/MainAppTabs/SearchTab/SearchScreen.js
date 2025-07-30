@@ -10,11 +10,8 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { Search } from 'lucide-react-native';
-import { useNavigation } from '@react-navigation/native';
 
-const SearchScreen = () => {
-  const navigation = useNavigation();
-  
+const SearchScreen = ({ navigation }) => {
   const trendingArtists = [
     {
       id: 1,
@@ -144,7 +141,7 @@ const SearchScreen = () => {
 
         {/* Trending Artists */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Trending artist</Text>
+          <Text style={styles.sectionTitle}>Trending artists</Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}

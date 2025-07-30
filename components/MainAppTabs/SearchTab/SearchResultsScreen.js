@@ -9,39 +9,44 @@ import {
   StyleSheet,
   SafeAreaView,
 } from 'react-native';
-import { ArrowLeft, X } from 'lucide-react-native';
+import { ArrowLeft, X, Play } from 'lucide-react-native';
+import { useAudio } from './AudioContext';
 
 const SearchResultsScreen = ({ navigation }) => {
+  const { currentlyPlaying, playTrack } = useAudio();
   const [searchText, setSearchText] = useState('');
   
   const [recentSearches, setRecentSearches] = useState([
     {
       id: 1,
-      title: 'You (feat. Travis Scott)',
-      subtitle: 'Song • Don Toliver',
+      title: 'The Night We Met',
+      subtitle: 'Song • Lord Huron',
       type: 'song',
-      image: require('../../../assets/images/songs/traviscott.jpg'), // You'll need to add this image
+      image: require('../../../assets/images/songs/lordhuron.jpg'),
+      audioFile: require('../../../assets/audio/thenightwemet.mp3'),
+      artist: 'Lord Huron',
+      duration: '3:42',
     },
     {
       id: 2,
       title: 'Pink Friday 2',
       subtitle: 'Album • Nicki Minaj',
       type: 'album',
-      image: require('../../../assets/images/album/pinkfriday2.jpg'), // You'll need to add this image
+      image: require('../../../assets/images/album/pinkfriday2.jpg'),
     },
     {
       id: 3,
       title: 'Maroon 5',
       subtitle: 'Artist',
       type: 'artist',
-      image: require('../../../assets/images/artists/maroon5.jpg'), // You'll need to add this image
+      image: require('../../../assets/images/artists/maroon5.jpg'),
     },
     {
       id: 4,
       title: 'IRON BOY',
       subtitle: 'Playlist',
       type: 'playlist',
-      image: require('../../../assets/images/playlists/iron-boy.jpg'), // You'll need to add this image
+      image: require('../../../assets/images/playlists/iron-boy.jpg'),
     },
   ]);
 
@@ -54,28 +59,39 @@ const SearchResultsScreen = ({ navigation }) => {
   };
 
   const renderSearchItem = (item) => (
-    <TouchableOpacity key={item.id} style={styles.searchItem}
-     onPress={() => {
-        if (item.type === 'artist' && item.title === 'Maroon 5') {
+    <TouchableOpacity 
+      key={item.id} 
+      style={styles.searchItem}
+      onPress={() => {
+        if (item.type === 'song' && item.audioFile) {
+          playTrack(item, [item]);
+        } else if (item.type === 'artist' && item.title === 'Maroon 5') {
           navigation.navigate('Artist');
         } else if (item.type === 'album' && item.title === 'Pink Friday 2') {
           navigation.navigate('Album');
-        }else if (item.type === 'playlist' && item.title === 'IRON BOY') {
+        } else if (item.type === 'playlist' && item.title === 'IRON BOY') {
           navigation.navigate('Playlist');
         }
-      
       }}
     >
       <Image source={item.image} style={styles.itemImage} />
       <View style={styles.itemInfo}>
-        <Text style={styles.itemTitle}>{item.title}</Text>
+        <Text style={[
+          styles.itemTitle,
+          currentlyPlaying === item.id && styles.playingItemTitle
+        ]}>
+          {item.title}
+        </Text>
         <Text style={styles.itemSubtitle}>{item.subtitle}</Text>
       </View>
+      {currentlyPlaying === item.id && item.type === 'song' && (
+        <Play size={16} color="#BB86FC" fill="#BB86FC" style={styles.playingIcon} />
+      )}
       <TouchableOpacity 
         style={styles.removeButton}
         onPress={() => removeSearch(item.id)}
       >
-        <Text style={styles.removeIcon}>✕</Text>
+        <X size={18} color="#888" />
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -88,7 +104,7 @@ const SearchResultsScreen = ({ navigation }) => {
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
-          <Text style={styles.backIcon}>←</Text>
+          <ArrowLeft size={24} color="#FFFFFF" />
         </TouchableOpacity>
         <View style={styles.searchBar}>
           <TextInput
@@ -147,10 +163,6 @@ const styles = StyleSheet.create({
     marginRight: 12,
     padding: 8,
   },
-  backIcon: {
-    color: '#FFFFFF',
-    fontSize: 20,
-  },
   searchBar: {
     flex: 1,
     backgroundColor: '#2A2A2A',
@@ -201,12 +213,14 @@ const styles = StyleSheet.create({
     color: '#888',
     fontSize: 14,
   },
+  playingItemTitle: {
+    color: '#BB86FC',
+  },
+  playingIcon: {
+    marginRight: 12,
+  },
   removeButton: {
     padding: 8,
-  },
-  removeIcon: {
-    color: '#888',
-    fontSize: 18,
   },
   clearButton: {
     alignSelf: 'flex-end',
