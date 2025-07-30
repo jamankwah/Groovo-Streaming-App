@@ -10,7 +10,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import { ArrowLeft, Play, MoveVertical as MoreVertical, Download, Heart } from 'lucide-react-native';
-import { useAudio } from '../AudioContext';
+import { useAudio } from './AudioContext';
 
 const AlbumScreen = ({ navigation }) => {
   const { currentlyPlaying, playTrack } = useAudio();
@@ -158,7 +158,7 @@ const AlbumScreen = ({ navigation }) => {
         {/* Hero Section */}
         <View style={styles.heroSection}>
           <ImageBackground
-            source={require('../assets/images/album/pinkfriday2.jpg')}
+            source={require('../../../assets/images/album/pinkfriday2.jpg')}
             style={styles.heroBackground}
             imageStyle={styles.heroImage}
           >
@@ -172,7 +172,7 @@ const AlbumScreen = ({ navigation }) => {
               
               <View style={styles.heroContent}>
                 <Image 
-                  source={require('../assets/images/album/pinkfriday2.jpg')}
+                  source={require('../../../assets/images/album/pinkfriday2.jpg')}
                   style={styles.albumCover}
                 />
                 <Text style={styles.albumTitle}>Pink Friday 2</Text>

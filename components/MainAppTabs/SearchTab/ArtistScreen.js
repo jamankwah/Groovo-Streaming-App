@@ -10,44 +10,59 @@ import {
   ImageBackground,
 } from 'react-native';
 import { ArrowLeft, Play, MoveVertical as MoreVertical } from 'lucide-react-native';
+import { useAudio } from './AudioContext';
 
 const ArtistScreen = ({ navigation }) => {
+  const { currentlyPlaying, playTrack } = useAudio();
+
   const popularReleases = [
     {
       id: 1,
       title: 'Misery',
       album: 'Maroon 5 - Misery',
       image: require('../../../assets/images/album/misery.jpg'),
+      audioFile: require('../../../assets/audio/misery.mp3'),
+      duration: '3:36',
     },
     {
       id: 2,
       title: 'Payphone',
       album: 'Maroon 5 - Overexposed',
       image: require('../../../assets/images/album/payphone.jpg'),
+      audioFile: require('../../../assets/audio/payphone.mp3'),
+      duration: '3:51',
     },
     {
       id: 3,
       title: 'Animals',
       album: 'Maroon 5 - V',
       image: require('../../../assets/images/album/animals.jpg'),
+      audioFile: require('../../../assets/audio/animals.mp3'),
+      duration: '3:51',
     },
     {
       id: 4,
       title: 'Sugar',
       album: 'Maroon 5 - Singles',
       image: require('../../../assets/images/album/sugar.jpg'),
+      audioFile: require('../../../assets/audio/sugar.mp3'),
+      duration: '3:55',
     },
     {
       id: 5,
       title: 'The Sun',
       album: 'Maroon 5 - Songs About Jane',
       image: require('../../../assets/images/album/the-sun.jpg'),
+      audioFile: require('../../../assets/audio/thesun.mp3'),
+      duration: '4:11',
     },
     {
       id: 6,
       title: 'What Lovers Do',
       album: 'Maroon 5 - Red Pill Blues Deluxe',
       image: require('../../../assets/images/album/whatloversdo.jpg'),
+      audioFile: require('../../../assets/audio/whatloversdo.mp3'),
+      duration: '3:20',
     },
   ];
 
@@ -93,12 +108,24 @@ const ArtistScreen = ({ navigation }) => {
   ];
 
   const renderPopularRelease = (item) => (
-    <TouchableOpacity key={item.id} style={styles.releaseItem}>
+    <TouchableOpacity 
+      key={item.id} 
+      style={styles.releaseItem}
+      onPress={() => playTrack(item, popularReleases)}
+    >
       <Image source={item.image} style={styles.releaseImage} />
       <View style={styles.releaseInfo}>
-        <Text style={styles.releaseTitle}>{item.title}</Text>
+        <Text style={[
+          styles.releaseTitle,
+          currentlyPlaying === item.id && styles.playingTrackTitle
+        ]}>
+          {item.title}
+        </Text>
         <Text style={styles.releaseAlbum}>{item.album}</Text>
       </View>
+      {currentlyPlaying === item.id && (
+        <Play size={16} color="#BB86FC" fill="#BB86FC" style={styles.playingIcon} />
+      )}
       <TouchableOpacity style={styles.moreButton}>
         <MoreVertical size={20} color="#888" />
       </TouchableOpacity>
@@ -147,7 +174,7 @@ const ArtistScreen = ({ navigation }) => {
 
         {/* Stats and Actions */}
         <View style={styles.statsSection}>
-          <Text style={styles.monthlyListeners}>2.3 L monthly listeners</Text>
+          <Text style={styles.monthlyListeners}>2.3M monthly listeners</Text>
           
           <View style={styles.actionButtons}>
             <TouchableOpacity style={styles.followButton}>
@@ -200,6 +227,7 @@ const ArtistScreen = ({ navigation }) => {
           </ScrollView>
         </View>
       </ScrollView>
+
     </SafeAreaView>
   );
 };
@@ -326,6 +354,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     marginBottom: 4,
+  },
+  playingTrackTitle: {
+    color: '#BB86FC',
+  },
+  playingIcon: {
+    marginRight: 8,
   },
   releaseAlbum: {
     color: '#888',
