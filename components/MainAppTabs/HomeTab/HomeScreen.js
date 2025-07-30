@@ -5,7 +5,7 @@ import { BlurView } from "expo-blur"
 import { Bell, Pause, Play, SkipForward } from "lucide-react-native"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { FlatList, Image, Modal, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native"
-import PlayerScreen from "../screens/MiniPlayer"
+import PlayerScreen from "./MiniPlayer"
 
 
 
@@ -211,13 +211,13 @@ const createQueue = () => {
 }
 
 const audioMap = {
-  "1": require("../../assets/audio/lomo.mp3"),
-  "2": require("../../assets/audio/young.mp3"),
-  "3": require("../../assets/audio/humble.mp3"),
-  "4": require("../../assets/audio/zenzele.mp3"),
-  "5": require("../../assets/audio/molly.mp3"),
-  "6": require("../../assets/audio/hot.mp3"),
-  "7": require("../../assets/audio/mandown.mp3"),
+  "1": require("../../../assets/audio/lomo.mp3"),
+  "2": require("../../../assets/audio/young.mp3"),
+  "3": require("../../../assets/audio/humble.mp3"),
+  "4": require("../../../assets/audio/zenzele.mp3"),
+  "5": require("../../../assets/audio/molly.mp3"),
+  "6": require("../../../assets/audio/hot.mp3"),
+  "7": require("../../../assets/audio/mandown.mp3"),
 }
 
 export default function IndexScreen() {
