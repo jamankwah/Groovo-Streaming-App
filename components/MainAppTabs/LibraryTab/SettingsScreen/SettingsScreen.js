@@ -70,14 +70,6 @@ const PROFILE_IMAGE_URL = "https://cdn.pixabay.com/photo/2025/07/21/19/22/woman-
     },
   ]
 
-  const toggleItems = [
-    {
-      title: "Show Lyrics on Player",
-      value: showLyrics,
-      onValueChange: setShowLyrics,
-    },
-  ]
-
   const otherItems = [
     {
       title: "Connect to a Device",
@@ -152,9 +144,6 @@ const PROFILE_IMAGE_URL = "https://cdn.pixabay.com/photo/2025/07/21/19/22/woman-
 
         {/* Settings Items */}
         <View style={styles.section}>{settingsItems.map(renderSettingItem)}</View>
-
-        {/* Toggle Items */}
-        <View style={styles.section}>{toggleItems.map(renderToggleItem)}</View>
 
         {/* Others Section */}
         <View style={styles.section}>
